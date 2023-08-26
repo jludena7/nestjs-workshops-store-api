@@ -5,9 +5,19 @@ import { AuthModule } from './modules/auth/auth.module';
 import { VideosModule } from './modules/videos/videos.module';
 import { CoursesModule } from './modules/courses/courses.module';
 import { AwardsModule } from './modules/awards/awards.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [AuthModule, VideosModule, CoursesModule, AwardsModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
+    AuthModule,
+    VideosModule,
+    CoursesModule,
+    AwardsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
