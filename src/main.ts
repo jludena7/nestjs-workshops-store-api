@@ -8,6 +8,6 @@ async function bootstrap() {
   app.use(json({ limit: '68mb' }));
 
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
+  await app.listen(process.env.APP_PORT);
 }
 bootstrap();
