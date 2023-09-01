@@ -10,9 +10,10 @@ export class CreateCourseDto {
   description: string;
 
   @IsNotEmpty()
-  @Length(3, 30)
+  @Length(3, 20)
   duration: string;
 
+  @IsNotEmpty()
   @IsNumber()
   capacity: number;
 

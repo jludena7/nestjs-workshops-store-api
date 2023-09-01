@@ -5,10 +5,12 @@ export class CreateVideoDto {
   @Length(3, 50)
   title: string;
 
-  @IsNotEmpty()
   @Length(70, 500)
   description: string;
 
   @IsUrl()
+  @IsNotEmpty()
   src: string;
+
+  score: number;
 }
