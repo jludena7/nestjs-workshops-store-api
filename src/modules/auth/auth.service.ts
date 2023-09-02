@@ -37,10 +37,4 @@ export class AuthService {
       user: userData,
     };
   }
-
-  async register(createUserDto: CreateUserDto) {
-    const { password, ...userTemp } = createUserDto;
-    const userData = { ...userTemp, password: await createHash(password) };
-    return this.userModel.create(userData);
-  }
 }
