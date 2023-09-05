@@ -7,48 +7,53 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
-import { JwtGuard } from '../../guards/jwt/jwt.guard';
-import { Request } from 'express';
+import { AuthenticationGuard } from '../../guards/authentication/authentication.guard';
 import { AuthorizationGuard } from '../../guards/authorization/authorization.guard';
-import { Authorization } from '../../decorators/authorization/authorization.decorator';
-import { RoleType } from '../../emun/role.type.enum';
+import { IsAllowed } from '../../decorators/is-allowed/is-allowed.decorator';
+import { RoleType } from '../../emun/role-type.enum';
+import { AuthUser } from '../../decorators/auth-user/auth-user.decorator';
 
 @Controller('courses')
-@UseGuards(JwtGuard, AuthorizationGuard)
+@UseGuards(AuthenticationGuard, AuthorizationGuard)
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Post()
-  @Authorization(RoleType.USER)
-  create(@Req() req: Request, @Body() createCourseDto: CreateCourseDto) {
-    return this.coursesService.create(createCourseDto);
+  @IsAllowed(RoleType.USER, RoleType.ADMIN)
+  create(@AuthUser() authUser: any, @Body() createCourseDto: CreateCourseDto) {
+    const data = { ...createCourseDto, author_id: authUser._id };
+    return this.coursesService.create(data);
   }
 
   @Get()
-  @Authorization(RoleType.USER)
+  @IsAllowed(RoleType.USER, RoleType.ADMIN)
   findAll() {
     return this.coursesService.findAll();
   }
 
   @Get(':id')
-  @Authorization(RoleType.USER)
+  @IsAllowed(RoleType.USER, RoleType.ADMIN)
   findOne(@Param('id') id: string) {
     return this.coursesService.findOne(id);
   }
 
   @Patch(':id')
-  @Authorization(RoleType.USER)
-  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
-    return this.coursesService.update(id, updateCourseDto);
+  @IsAllowed(RoleType.USER, RoleType.ADMIN)
+  update(
+    @Param('id') id: string,
+    @AuthUser() authUser: any,
+    @Body() updateCourseDto: UpdateCourseDto,
+  ) {
+    const data = { ...updateCourseDto, author_id: authUser._id };
+    return this.coursesService.update(id, data);
   }
 
   @Delete(':id')
-  @Authorization(RoleType.USER)
+  @IsAllowed(RoleType.USER, RoleType.ADMIN)
   remove(@Param('id') id: string) {
     return this.coursesService.remove(id);
   }

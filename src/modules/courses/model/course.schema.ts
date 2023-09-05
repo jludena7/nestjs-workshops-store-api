@@ -5,8 +5,8 @@ export type CourseDocument = HydratedDocument<Course>;
 
 @Schema()
 export class Course {
-  //@Prop()
-  //author_id: mongoose.Types.ObjectId;
+  @Prop()
+  author_id: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   title: string;

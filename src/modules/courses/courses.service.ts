@@ -9,7 +9,7 @@ import { Course, CourseDocument } from './model/course.schema';
 export class CoursesService {
   constructor(
     @InjectModel(Course.name)
-    private readonly courseModel: Model<CourseDocument>
+    private readonly courseModel: Model<CourseDocument>,
   ) {}
 
   create(createCourseDto: CreateCourseDto) {
